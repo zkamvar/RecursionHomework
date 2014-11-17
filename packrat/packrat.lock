@@ -7,7 +7,42 @@ Repos: CRAN=http://cran.at.r-project.org/,
     BioCexp=http://bioconductor.org/packages/2.13/data/experiment,
     BioCextra=http://bioconductor.org/packages/2.13/extra
 
+Package: digest
+Source: CRAN
+Version: 0.6.4
+
+Package: evaluate
+Source: CRAN
+Version: 0.5.5
+Requires: stringr
+
+Package: formatR
+Source: CRAN
+Version: 1.0
+
+Package: highr
+Source: CRAN
+Version: 0.4
+
+Package: knitr
+Source: CRAN
+Version: 1.8
+Requires: digest, formatR, highr, stringr, markdown, evaluate
+
+Package: markdown
+Source: CRAN
+Version: 0.7.4
+Requires: mime
+
+Package: mime
+Source: CRAN
+Version: 0.2
+
 Package: packrat
 Source: CRAN
 Version: 0.4.1-1
 Hash: 5716097644904b9c1b4be2692de16005
+
+Package: stringr
+Source: CRAN
+Version: 0.6.2
