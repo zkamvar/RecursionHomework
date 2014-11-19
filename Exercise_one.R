@@ -63,6 +63,71 @@ knitr::kable(restab)
 meltres <- reshape2::melt(restab, measure.vars = 2:3)
 ggplot(meltres, aes(x = n, y = value, color = variable)) + geom_line()
 #' 
+#' 
+#' ### Question: what's the relationship between `fib(n)` and `CALL_COUNTER`?
+#' 
+#' First assumption: we know that `CALL_COUNTER` is always greater than or equal
+#' to `fib(n)`
+all(restab[[2]] <= CALL_COUNTER)
+#' 
+#' Now that we've established that, we should try to find some relationship
+#' between the two. One easy way to start is to plot `fib(n)` against
+#' `CALL_COUNTER` and see if there is a linear relationship.
+plot(restab[[2]], restab[[3]])
+#' 
+#' There is an apparent linear relationship Let's look at the differences. 
+(call_diff <- restab[[3]] - restab[[2]])
+#' 
+#' and the differences between the differences
+diff(call_diff)
+#' The differences between the differences result in a fibonacci sequence. This 
+#' makes sense given the linear relationship. If we think in terms of what the 
+#' function is doing, in the simplest two cases, the function is being called 
+#' once. In the case of 3, the function is called 3 times:
+#' 
+#' ```
+#' 2 = fib(3) -> fib(2) + fib(1)
+#' ```
+#' 
+#' In the case of 4, the function is called 5 times:
+#' 
+#' ```
+#' 3 = fib(4) -> (fib(3) -> fib(2) + fib(1)) + 
+#'               fib(2)
+#' ```
+#' 
+#' In the case of 5, the function is called 9 times:
+#' 
+#' ```
+#' 5 = fib(5) -> (fib(4) -> (fib(3) -> fib(2) + fib(1)) + fib(2)) + 
+#'               (fib(3) -> fib(2) + fib(1))
+#' ```
+#' 
+#' What happens is that the function is called twice within the function if the 
+#' case is not 2 or 1. So, we can see whether or not multiplying the call by two
+#' will work. The difference between these numbers should be zero if this works.
+restab[[2]]*2 - restab[[3]]
+#' 
+#' That didn't work, but we have all ones. This means that the linear
+#' relationship is indeed double, but there's an extra call left over. If we
+#' think about it, we actually have three calls per call, but since there is the
+#' initial call that's not taken into account, we need to subtract it from the
+#' doubling effort. This will bring it to zero.
+#' 
+#' How can we prove this? One way to do this would be to predict the next 
+#' CALL_COUNTER value by utilizing the next number in the fibonacci sequence.
+(nextfib  <- restab[[2]][19] + restab[[2]][20])
+(nextcall <- nextfib*2 - 1)
+CALL_COUNTER <- 0
+fib(21)
+CALL_COUNTER
+CALL_COUNTER == nextcall
+#' 
+#' The formula to calculate the number of calls needed to calculate the 
+#' $n^{th}$ fibonacci number:
+#' $\left(2 \times fib(n)\right) - 1$
+#' 
+#' 
 #' ## Factorials!
 #' 
 #' A factorial is simply the product of n by all the integers that come before it
