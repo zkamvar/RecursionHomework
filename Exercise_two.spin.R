@@ -126,13 +126,12 @@ for (r in 1:10){
                           parasite = parasites(i, seed = seed),
                           t        = i,
                           seed     = seed
-    )
-    )
+                          )
+                     )
     HP_STACK <- insert_top(HP_STACK, df)
   }
 }
 hpdf <- as.data.frame(HP_STACK)
-#' Now to plot
 ggplot(melt(hpdf, measure.vars = c("host", "parasite")), 
        aes(x = t, y = value, color = variable)) + 
   geom_line(aes(linetype = factor(seed)), alpha = 0.5) + geom_smooth()
