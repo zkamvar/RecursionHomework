@@ -118,8 +118,8 @@ parasites <- function(t, gamma = 2, a = 0.1, seed = 9999){
 #+ cache = TRUE
 HP_STACK <<- rstack()
 set.seed(9999)
-seeds <- sample(10000, 10)
-for (r in 1:10){    
+seeds <- sample(10000, 5)
+for (r in 1:5){    
   seed <- seeds[r]
   for (i in 1:20){
     df <- data.frame(list(host     = hosts(i, seed = seed),
