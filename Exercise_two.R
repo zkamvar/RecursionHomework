@@ -126,8 +126,11 @@ for (r in 1:5){
                           parasite = parasites(i, seed = seed),
                           t        = i,
                           seed     = seed
-    )
-    )
+                          )
+                     )
+    set.seed(seed); Nhost <- rpois(1, 10)
+    set.seed(seed); Npar  <- rpois(1, 2)
+    df$seed <- paste("Seed:", seed, ", NH:", Nhost, ", NP:", Npar)
     HP_STACK <- insert_top(HP_STACK, df)
   }
 }
@@ -135,21 +138,4 @@ hpdf <- as.data.frame(HP_STACK)
 #' Now to plot
 ggplot(melt(hpdf, measure.vars = c("host", "parasite")), 
        aes(x = t, y = value, color = variable)) + 
-  geom_line(aes(linetype = factor(seed)), alpha = 0.5) + geom_smooth()
-#' 
-#' Now I'm going to do that 1000 times.
-# library(doParallel)
-# library(foreach)
-# (ncores <- detectCores())
-# cl <- makeCluster(ncores)
-# registerDoParallel(cl)
-# getDoParWorkers()
-# HP <- rstack()
-# set.seed(9001)
-# system.time(HPlist <- foreach(i = 1:10) %dopar% {
-#   data.frame(list(hosts = hosts(20), parasites = parasites(20)))
-# })
-# stopCluster(cl)
-# for (i in 1:10){
-#   HP <- insert_top(HP, HPlist[[i]])
-# }
+  geom_line(aes(linetype = factor(seed)), alpha = 0.5) + theme_classic()
