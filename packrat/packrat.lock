@@ -196,11 +196,11 @@ GithubSha1: b96214b9ac86b437067a0aa21442203f52face83
 Package: rstackdeque
 Source: github
 Version: 1.0
-Hash: b392cde67030461270fa75f332f27cfc293aeef1
+Hash: 29325c673e09bf20ebd371da9e5a1784e1102a68
 GithubRepo: rstackdeque
 GithubUsername: oneilsh
 GithubRef: master
-GithubSha1: b392cde67030461270fa75f332f27cfc293aeef1
+GithubSha1: 29325c673e09bf20ebd371da9e5a1784e1102a68
 
 Package: rstudioapi
 Source: CRAN
