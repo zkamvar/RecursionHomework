@@ -98,7 +98,7 @@ hosts <- function(t, gamma = 2, a = 0.1, seed = 9999){
   } else {
     Htm1 <- hosts(t - 1, gamma, a, seed)
     Ptm1 <- parasites(t - 1, gamma, a, seed)
-    Ht   <- Htm1 * exp(-a * Ptm1)
+    Ht   <- gamma * Htm1 * exp(-a * Ptm1)
     return(Ht)
   }
 }
@@ -119,7 +119,7 @@ parasites <- function(t, gamma = 2, a = 0.1, seed = 9999){
 HP_STACK <<- rstack()
 set.seed(9999)
 seeds <- sample(10000, 5)
-for (r in 1:5){    
+for (r in 1:2){    
   seed <- seeds[r]
   for (i in 1:20){
     df <- data.frame(list(host     = hosts(i, seed = seed),
@@ -138,4 +138,4 @@ hpdf <- as.data.frame(HP_STACK)
 #' Now to plot
 ggplot(melt(hpdf, measure.vars = c("host", "parasite")), 
        aes(x = t, y = value, color = variable)) + 
-  geom_line(aes(linetype = seed)) + theme_classic()
+  geom_line() + facet_wrap(~seed, scales = "free_y") + theme_classic()
