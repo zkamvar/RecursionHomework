@@ -119,7 +119,7 @@ parasites <- function(t, gamma = 2, a = 0.1, seed = 9999){
 HP_STACK <<- rstack()
 set.seed(9999)
 seeds <- sample(10000, 5)
-for (r in 1:2){    
+for (r in 1:3){    
   seed <- seeds[r]
   for (i in 1:20){
     df <- data.frame(list(host     = hosts(i, seed = seed),
@@ -136,6 +136,7 @@ for (r in 1:2){
 }
 hpdf <- as.data.frame(HP_STACK)
 #' Now to plot
+#+ fig.width = 10, fig.height = 7
 ggplot(melt(hpdf, measure.vars = c("host", "parasite")), 
        aes(x = t, y = value, color = variable)) + 
   geom_line() + facet_wrap(~seed, scales = "free_y") + theme_classic()
