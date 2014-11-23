@@ -134,6 +134,12 @@ Version: 0.2.1
 Hash: fc52fa39dfd216c44d64812ff31b1c67
 Requires: digest
 
+Package: microbenchmark
+Source: CRAN
+Version: 1.4-2
+Hash: 658f0ab7fa41ec9c3187ffef516d6c4e
+Requires: ggplot2
+
 Package: mime
 Source: CRAN
 Version: 0.2
