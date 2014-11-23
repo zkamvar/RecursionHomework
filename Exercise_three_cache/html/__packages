@@ -1,0 +1,6 @@
+base
+hash
+stringr
+microbenchmark
+reshape2
+ggplot2
