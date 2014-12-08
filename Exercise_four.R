@@ -40,8 +40,9 @@ unvec_char <- function(a){
 #'  - match: a score for matching sequences
 #'  - gap: a score for sequences with gaps
 #'  - mismatch: a score for non-matching sequences
+#'  - tstv: a two numbered vector giving the scores for transitions and transversions.
 #'  
-score_aln <- function(xin, yin, match = 2, gap = -4, mismatch = -3){
+score_aln <- function(xin, yin, match = 2, gap = -4, mismatch = -3, tstv = NULL){
   if (length(xin) != length(yin)){
     stop("Can't score sequences of unequal length.")
   }
@@ -53,6 +54,13 @@ score_aln <- function(xin, yin, match = 2, gap = -4, mismatch = -3){
       score <- score + match
     } else if (xi == "-" || yi == "-"){
       score <- score + gap
+    } else if (!is.null(tstv)){
+      sorts <- toupper(sort(c(xi, yi)))
+      if (all(sorts == c("A", "T")) | all(sorts == c("C", "G"))){
+        score <- score + tstv[1]
+      } else {
+        score <- score + tstv[2]
+      }
     } else {
       score <- score + mismatch
     }
@@ -61,13 +69,18 @@ score_aln <- function(xin, yin, match = 2, gap = -4, mismatch = -3){
 }
 #'
 #' #### Compute the base case
-base_case <- function(xin, yin){
+base_case <- function(xin, yin, tstv = FALSE){
   if (length(xin) > 1 & length(yin) != 0 || length(yin) > 1 & length(xin) != 0){
     stop("This is not a base case.")
   } else if (length(xin) == 1 & length(yin) == 1){
+    if (tstv){
+      tstv <- c(-2, -3)
+    } else {
+      tstv <- NULL
+    }
     answer <- list(x = xin, y = yin,
                    xaln = xin, yaln = yin,
-                   score = score_aln(xin, yin))
+                   score = score_aln(xin, yin, tstv = tstv))
     return(answer)
   } else if (length(xin) == 0){
 #     xaligned <- c()
@@ -117,3 +130,7 @@ x <- char_vec(xpre)
 y <- char_vec(ypre)
 base_case_answer_2 <- base_case(x, y)
 print(base_case_answer_2)
+
+#' ### Testing base case two point one: transition.
+base_case_answer_2.1 <- base_case(x, y, tstv = TRUE)
+print(base_case_answer_2.1)

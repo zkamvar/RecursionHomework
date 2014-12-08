@@ -54,7 +54,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="header">
 <h1 class="title">Exercise_four.R</h1>
 <h4 class="author"><em>zhian</em></h4>
-<h4 class="date"><em>Sun Nov 30 11:03:32 2014</em></h4>
+<h4 class="date"><em>Sun Dec 7 16:56:23 2014</em></h4>
 </div>
 
 
@@ -88,8 +88,8 @@ library(hash)</code></pre>
 <h3>Scoring Functions</h3>
 <div id="compute-the-score-of-an-alignment" class="section level4">
 <h4>Compute the score of an alignment</h4>
-<p>Inputs: - xin: a character vector - yin: a character vector - match: a score for matching sequences - gap: a score for sequences with gaps - mismatch: a score for non-matching sequences</p>
-<pre class="r"><code>score_aln &lt;- function(xin, yin, match = 2, gap = -4, mismatch = -3){
+<p>Inputs: - xin: a character vector - yin: a character vector - match: a score for matching sequences - gap: a score for sequences with gaps - mismatch: a score for non-matching sequences - tstv: a two numbered vector giving the scores for transitions and transversions.</p>
+<pre class="r"><code>score_aln &lt;- function(xin, yin, match = 2, gap = -4, mismatch = -3, tstv = NULL){
   if (length(xin) != length(yin)){
     stop(&quot;Can't score sequences of unequal length.&quot;)
   }
@@ -101,6 +101,13 @@ library(hash)</code></pre>
       score &lt;- score + match
     } else if (xi == &quot;-&quot; || yi == &quot;-&quot;){
       score &lt;- score + gap
+    } else if (!is.null(tstv)){
+      sorts &lt;- toupper(sort(c(xi, yi)))
+      if (all(sorts == c(&quot;A&quot;, &quot;T&quot;)) | all(sorts == c(&quot;C&quot;, &quot;G&quot;))){
+        score &lt;- score + tstv[1]
+      } else {
+        score &lt;- score + tstv[2]
+      }
     } else {
       score &lt;- score + mismatch
     }
@@ -110,13 +117,18 @@ library(hash)</code></pre>
 </div>
 <div id="compute-the-base-case" class="section level4">
 <h4>Compute the base case</h4>
-<pre class="r"><code>base_case &lt;- function(xin, yin){
+<pre class="r"><code>base_case &lt;- function(xin, yin, tstv = FALSE){
   if (length(xin) &gt; 1 &amp; length(yin) != 0 || length(yin) &gt; 1 &amp; length(xin) != 0){
     stop(&quot;This is not a base case.&quot;)
   } else if (length(xin) == 1 &amp; length(yin) == 1){
+    if (tstv){
+      tstv &lt;- c(-2, -3)
+    } else {
+      tstv &lt;- NULL
+    }
     answer &lt;- list(x = xin, y = yin,
                    xaln = xin, yaln = yin,
-                   score = score_aln(xin, yin))
+                   score = score_aln(xin, yin, tstv = tstv))
     return(answer)
   } else if (length(xin) == 0){
 #     xaligned &lt;- c()
@@ -198,6 +210,25 @@ print(base_case_answer_2)</code></pre>
 ## 
 ## $score
 ## [1] -3</code></pre>
+</div>
+<div id="testing-base-case-two-point-one-transition." class="section level3">
+<h3>Testing base case two point one: transition.</h3>
+<pre class="r"><code>base_case_answer_2.1 &lt;- base_case(x, y, tstv = TRUE)
+print(base_case_answer_2.1)</code></pre>
+<pre><code>## $x
+## [1] &quot;T&quot;
+## 
+## $y
+## [1] &quot;A&quot;
+## 
+## $xaln
+## [1] &quot;T&quot;
+## 
+## $yaln
+## [1] &quot;A&quot;
+## 
+## $score
+## [1] -2</code></pre>
 </div>
 </div>
 </div>

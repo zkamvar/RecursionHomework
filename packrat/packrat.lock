@@ -18,6 +18,10 @@ Version: 1.17.1
 Hash: bb5fdc266f716b8a289a4f92007d53e3
 Requires: bitops
 
+Package: codetools
+Source: CRAN
+Version: 0.2-9
+
 Package: colorspace
 Source: CRAN
 Version: 1.2-4
@@ -56,7 +60,7 @@ Package: foreach
 Source: CRAN
 Version: 1.4.2
 Hash: fbdaa99f6c6bd4f252c5d8412f6e79c9
-Requires: iterators
+Requires: codetools, iterators
 
 Package: formatR
 Source: CRAN
