@@ -54,7 +54,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="header">
 <h1 class="title">Exercise_five.R</h1>
 <h4 class="author"><em>zhian</em></h4>
-<h4 class="date"><em>Wed Dec 10 11:03:14 2014</em></h4>
+<h4 class="date"><em>Wed Dec 10 11:35:24 2014</em></h4>
 </div>
 
 
@@ -62,6 +62,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <h1>Global Alignment</h1>
 <div id="packages" class="section level3">
 <h3>Packages</h3>
+<p>Loading the required packages as well as all of the functions from <a href="Exercise_four.html">Exercise four</a>.</p>
 <pre class="r"><code>library(stringr)
 library(rstackdeque)
 library(hash)</code></pre>
@@ -139,6 +140,68 @@ library(hash)</code></pre>
 ##  [4] &quot;base_case_answer_2.1&quot; &quot;char_vec&quot;             &quot;score_aln&quot;           
 ##  [7] &quot;unvec_char&quot;           &quot;x&quot;                    &quot;xpre&quot;                
 ## [10] &quot;y&quot;                    &quot;ypre&quot;</code></pre>
+</div>
+<div id="recursive-solution" class="section level3">
+<h3>Recursive solution</h3>
+<p>First, we will present a recursive solution to global alignment.</p>
+<p>The idea is that if we have two sequences that we want to align that aren’t base cases, they will need to be split up into smaller problems in order to solve them.</p>
+<p>Remember that to produce the base cases, we chop off the ends of the sequences and call them <span class="math">\(e_x\)</span> and <span class="math">\(e_y\)</span>. The prefixes become <span class="math">\(P_x\)</span> and <span class="math">\(P_y\)</span>. Once we do this, we have three cases:</p>
+<ul>
+<li><span class="math">\(^{(A)}P_x\)</span> with <span class="math">\(P_y\)</span> and <span class="math">\(e_x\)</span> with <span class="math">\(e_y\)</span></li>
+<li><span class="math">\(^{(B)}P_x + e_x\)</span> with <span class="math">\(P_y\)</span> and <span class="math">\(-\)</span> with <span class="math">\(e_y\)</span></li>
+<li><span class="math">\(^{(C)}P_x\)</span> with <span class="math">\(P_y + e_y\)</span> and <span class="math">\(e_x\)</span> with <span class="math">\(-\)</span></li>
+</ul>
+<p>These alignments will produce the following scores:</p>
+<ul>
+<li><span class="math">\(score_A = S(A) + S(e_x + e_y)\)</span></li>
+<li><span class="math">\(score_B = S(B) + S(- + e_y)\)</span></li>
+<li><span class="math">\(score_C = S(C) + S(e_x + -)\)</span></li>
+</ul>
+<p>The best scores win!</p>
+<pre class="r"><code>global_aln &lt;- function(x, y){
+  if (length(x) == 0 || length(y) == 0 || length(x) == 1 &amp; length(y) == 1){
+    return(base_case(x, y))
+  }
+  # Split up into prefixes and suffixes
+  xlen &lt;- length(x)
+  ylen &lt;- length(y)
+  px &lt;- x[1:(xlen - 1)]
+  py &lt;- y[1:(ylen - 1)]
+  ex &lt;- x[xlen]
+  ey &lt;- y[ylen]
+  
+  # Computing three alignments
+  A &lt;- global_aln(px, py)
+  B &lt;- global_aln(c(px, ex), py)
+  C &lt;- global_aln(px, c(py, ey))
+  
+  # Compiling scores
+  answerA &lt;- list(x = x, y = y, 
+                  xaln = c(A[[&quot;xaln&quot;]], ex),
+                  yaln = c(A[[&quot;yaln&quot;]], ey),
+                  score = A[[&quot;score&quot;]] + score_aln(ex, ey))
+  answerB &lt;- list(x = x, y = y, 
+                  xaln = c(B[[&quot;xaln&quot;]], &quot;-&quot;),
+                  yaln = c(B[[&quot;yaln&quot;]], ey),
+                  score = B[[&quot;score&quot;]] + score_aln(&quot;-&quot;, ey))
+  answerC &lt;- list(x = x, y = y, 
+                  xaln = c(C[[&quot;xaln&quot;]], ex),
+                  yaln = c(C[[&quot;yaln&quot;]], &quot;-&quot;),
+                  score = C[[&quot;score&quot;]] + score_aln(ex, &quot;-&quot;))
+  
+  # finding the best score
+  bestanswer &lt;- answerA
+  bestscore  &lt;- answerA[[&quot;score&quot;]]
+  if (answerB[[&quot;score&quot;]] &gt; bestscore){
+    bestanswer &lt;- answerB
+    bestscore  &lt;- answerB[[&quot;score&quot;]]
+  }
+  if (answerC[[&quot;score&quot;]] &gt; bestscore){
+    bestanswer &lt;- answerC
+    bestscore  &lt;- answerC[[&quot;score&quot;]]
+  }
+  return(bestanswer)
+}</code></pre>
 </div>
 </div>
 
