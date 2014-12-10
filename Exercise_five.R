@@ -41,8 +41,8 @@ global_aln <- function(x, y){
   # Split up into prefixes and suffixes
   xlen <- length(x)
   ylen <- length(y)
-  px <- x[1:(xlen - 1)]
-  py <- y[1:(ylen - 1)]
+  px <- x[1:xlen - 1]
+  py <- y[1:ylen - 1]
   ex <- x[xlen]
   ey <- y[ylen]
   
@@ -78,3 +78,9 @@ global_aln <- function(x, y){
   }
   return(bestanswer)
 }
+
+#' #### Testing Recursive function
+x <- char_vec("TATCGG")
+y <- char_vec("TCTGG")
+answer <- global_aln(x, y)
+print(answer)

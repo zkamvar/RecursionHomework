@@ -54,7 +54,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="header">
 <h1 class="title">Exercise_five.R</h1>
 <h4 class="author"><em>zhian</em></h4>
-<h4 class="date"><em>Wed Dec 10 11:35:24 2014</em></h4>
+<h4 class="date"><em>Wed Dec 10 12:18:58 2014</em></h4>
 </div>
 
 
@@ -165,8 +165,8 @@ library(hash)</code></pre>
   # Split up into prefixes and suffixes
   xlen &lt;- length(x)
   ylen &lt;- length(y)
-  px &lt;- x[1:(xlen - 1)]
-  py &lt;- y[1:(ylen - 1)]
+  px &lt;- x[1:xlen - 1]
+  py &lt;- y[1:ylen - 1]
   ex &lt;- x[xlen]
   ey &lt;- y[ylen]
   
@@ -202,6 +202,27 @@ library(hash)</code></pre>
   }
   return(bestanswer)
 }</code></pre>
+<div id="testing-recursive-function" class="section level4">
+<h4>Testing Recursive function</h4>
+<pre class="r"><code>x &lt;- char_vec(&quot;TATCGG&quot;)
+y &lt;- char_vec(&quot;TCTGG&quot;)
+answer &lt;- global_aln(x, y)
+print(answer)</code></pre>
+<pre><code>## $x
+## [1] &quot;T&quot; &quot;A&quot; &quot;T&quot; &quot;C&quot; &quot;G&quot; &quot;G&quot;
+## 
+## $y
+## [1] &quot;T&quot; &quot;C&quot; &quot;T&quot; &quot;G&quot; &quot;G&quot;
+## 
+## $xaln
+## [1] &quot;T&quot; &quot;A&quot; &quot;T&quot; &quot;C&quot; &quot;G&quot; &quot;G&quot;
+## 
+## $yaln
+## [1] &quot;T&quot; &quot;C&quot; &quot;T&quot; &quot;-&quot; &quot;G&quot; &quot;G&quot;
+## 
+## $score
+## [1] 1</code></pre>
+</div>
 </div>
 </div>
 
